@@ -1,6 +1,10 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using Microsoft.EntityFrameworkCore;
+using restaurant.server.Context;
 
-app.MapGet("/", () => "Hello World!");
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContextPool<RestaurantContext>(opt => 
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("RestaurantContext")));
+
+var app = builder.Build();
 
 app.Run();
