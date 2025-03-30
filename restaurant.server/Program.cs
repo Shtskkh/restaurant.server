@@ -5,7 +5,8 @@ using restaurant.server.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContextPool<RestaurantContext>(opt => 
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("RestaurantContext")));
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("RestaurantContext"), 
+        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
