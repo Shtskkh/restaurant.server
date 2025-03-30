@@ -5,7 +5,7 @@ using restaurant.server.Services;
 namespace restaurant.server.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthController(IAuthService authService) : Controller
 {
     [HttpPost]
