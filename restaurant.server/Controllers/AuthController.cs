@@ -9,7 +9,7 @@ namespace restaurant.server.Controllers;
 public class AuthController(IAuthService authService) : Controller
 {
     [HttpPost]
-    public async Task<IActionResult> Login([FromBody] LoginRequestModel request)
+    public async Task<IActionResult> Login([FromForm] LoginRequestModel request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
