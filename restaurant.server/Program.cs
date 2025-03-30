@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using restaurant.server.Context;
 using restaurant.server.DTOs;
 using restaurant.server.Repositories;
+using restaurant.server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 
 builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
 
