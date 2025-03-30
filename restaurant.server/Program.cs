@@ -32,6 +32,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 
+builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
+
 var app = builder.Build();
 
 app.UseAuthentication();
