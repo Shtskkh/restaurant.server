@@ -32,6 +32,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 
