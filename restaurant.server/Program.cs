@@ -32,7 +32,10 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
+
+builder.Services.AddControllers();
 
 builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("JwtSettings"));
 
@@ -40,5 +43,6 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
