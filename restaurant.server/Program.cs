@@ -8,6 +8,7 @@ builder.Services.AddDbContextPool<RestaurantContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("RestaurantContext")));
 
 builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 
 var app = builder.Build();
 
