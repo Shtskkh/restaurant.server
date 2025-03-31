@@ -8,7 +8,7 @@ namespace restaurant.server.Controllers;
 [Route("api/[controller]")]
 public class AuthController(IAuthService authService) : Controller
 {
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromForm] LoginRequestModel request)
     {
         if (!ModelState.IsValid)
@@ -20,7 +20,8 @@ public class AuthController(IAuthService authService) : Controller
         
         return Ok(new { access_token = accessToken });
     }
-
+    
+    [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshRequestModel request)
     {
         if (!ModelState.IsValid)
