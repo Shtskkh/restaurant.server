@@ -10,6 +10,7 @@ namespace restaurant.server.Services;
 public interface IJwtTokenService
 {
     public string GenerateAccessToken(List<Claim> claims);
+    public Task<TokenValidationResult> ValidateAccessToken(string token);
 }
 
 public class JwtTokenService(IOptions<JwtSettingsModel> jwtSettings) : IJwtTokenService
@@ -30,4 +31,20 @@ public class JwtTokenService(IOptions<JwtSettingsModel> jwtSettings) : IJwtToken
         
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
+
+    public async Task<TokenValidationResult> ValidateAccessToken(string accessToken)
+    {
+        var validationParameters = new TokenValidationParameters {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = _jwtSettings.Issuer,
+            ValidAudience = _jwtSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey))
+        };
+        
+        var tokenHandler = new JwtSecurityTokenHandler();
+        return await tokenHandler.ValidateTokenAsync(accessToken, validationParameters);
+    }
+    
 }

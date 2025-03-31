@@ -20,4 +20,16 @@ public class AuthController(IAuthService authService) : Controller
         
         return Ok(new { access_token = accessToken });
     }
+
+    public async Task<IActionResult> Refresh([FromBody] RefreshRequestModel request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        var accessToken = await authService.Refresh(request.Login, request.AccessToken);
+        if (string.IsNullOrEmpty(accessToken))
+            return Unauthorized();
+        
+        return Ok(new { access_token = accessToken });
+    }
 }
