@@ -7,6 +7,8 @@ namespace restaurant.server.Services;
 public interface IStaffService
 {
     Task<List<StaffModel>> GetAll();
+    Task<StaffModel?> GetById(int id);
+    Task<StaffModel?> GetByLogin(string login);
 }
 
 public class StaffService(IStaffRepository staffRepository, IPositionsRepository positionsRepository) : IStaffService
@@ -31,5 +33,43 @@ public class StaffService(IStaffRepository staffRepository, IPositionsRepository
                 });
 
         return allStaffDto.ToList();
+    }
+
+    public async Task<StaffModel?> GetById(int id)
+    {
+        var staff = await staffRepository.GetById(id);
+        if (staff == null) return null;
+        var position = await positionsRepository.GetById(staff.IdPosition);
+        var staffDto = new StaffModel
+        {
+            IdEmployee = staff.IdEmployee,
+            IdPosition = staff.IdPosition,
+            Position = position!.Title,
+            LastName = staff.LastName,
+            FirstName = staff.FirstName,
+            MiddleName = staff.MiddleName,
+            PhoneNumber = staff.PhoneNumber,
+        };
+        
+        return staffDto;
+    }
+    
+    public async Task<StaffModel?> GetByLogin(string login)
+    {
+        var staff = await staffRepository.GetByLogin(login);
+        if (staff == null) return null;
+        var position = await positionsRepository.GetById(staff.IdPosition);
+        var staffDto = new StaffModel
+        {
+            IdEmployee = staff.IdEmployee,
+            IdPosition = staff.IdPosition,
+            Position = position!.Title,
+            LastName = staff.LastName,
+            FirstName = staff.FirstName,
+            MiddleName = staff.MiddleName,
+            PhoneNumber = staff.PhoneNumber,
+        };
+        
+        return staffDto;
     }
 }
