@@ -14,4 +14,22 @@ public class StaffController(IStaffService staffService) : Controller
     {
         return Ok(await staffService.GetAll());
     }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var staff = await staffService.GetById(id);
+        if (staff == null)
+            return NotFound();
+        return Ok(staff);
+    }
+
+    [HttpGet("{login}")]
+    public async Task<IActionResult> GetByLogin(string login)
+    {
+        var staff = await staffService.GetByLogin(login);
+        if (staff == null)
+            return NotFound();
+        return Ok(staff);
+    }
 }
