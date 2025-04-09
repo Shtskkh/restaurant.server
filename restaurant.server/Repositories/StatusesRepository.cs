@@ -4,7 +4,15 @@ using restaurant.server.Models;
 
 namespace restaurant.server.Repositories;
 
-public class StatusesRepository(RestaurantContext context)
+public interface IStatusesRepository
+{
+    Task<List<Status>> GetAll();
+    Task<Status?> GetById(int id);
+    Task Add(Status status);
+    Task Update(Status status);
+    Task Delete(int id);
+}
+public class StatusesRepository(RestaurantContext context) : IStatusesRepository
 {
     public async Task<List<Status>> GetAll()
     {
