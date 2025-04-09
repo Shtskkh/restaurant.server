@@ -4,7 +4,7 @@ using restaurant.server.Services;
 namespace restaurant.server.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class OrdersController(IOrdersService ordersService) : Controller
 {
     [HttpGet]
