@@ -45,7 +45,7 @@ public class PositionsRepository(RestaurantContext context) : IPositionsReposito
 
     public async Task Delete(int id)
     {
-        var position = await context.Positions.FirstOrDefaultAsync(p => p.IdPosition == id);
+        var position = await GetById(id);
         if (position != null)
         {
             context.Positions.Remove(position);
