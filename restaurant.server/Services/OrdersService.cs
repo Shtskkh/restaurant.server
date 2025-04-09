@@ -10,10 +10,10 @@ public interface IOrdersService
 }
 
 public class OrdersService(
-    OrdersRepository ordersRepository,
-    TablesRepository tablesRepository,
-    StatusesRepository statusesRepository,
-    StaffService staffService
+    IOrdersRepository ordersRepository,
+    ITablesRepository tablesRepository,
+    IStatusesRepository statusesRepository,
+    IStaffService staffService
 ) : IOrdersService
 {
     public async Task<List<OrderModel>> GetAll()
