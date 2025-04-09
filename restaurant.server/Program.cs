@@ -36,6 +36,7 @@ builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<ITablesRepository, TablesRepository>();
 builder.Services.AddScoped<IStatusesRepository, StatusesRepository>();
 builder.Services.AddScoped<IStaffService, StaffService>();
+builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 
