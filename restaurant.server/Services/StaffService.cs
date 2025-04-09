@@ -15,24 +15,22 @@ public class StaffService(IStaffRepository staffRepository, IPositionsRepository
 {
     public async Task<List<StaffModel>> GetAll()
     {
-        var allStaff = await staffRepository.GetAll();
-        var allPositions = await positionsRepository.GetAll();
-        var allStaffDto = allStaff
-            .Join(allPositions,
-                s => s.IdPosition,
-                p => p.IdPosition,
-                (s, p) => new StaffModel
-                {
-                    IdEmployee = s.IdEmployee,
-                    IdPosition = s.IdPosition,
-                    Position = p.Title,
-                    LastName = s.LastName,
-                    FirstName = s.FirstName,
-                    MiddleName = s.MiddleName,
-                    PhoneNumber = s.PhoneNumber,
-                });
+        var staff = await staffRepository.GetAll();
+        var positions = await positionsRepository.GetAll();
+        var staffModels = from s in staff
+            join p in positions on s.IdPosition equals p.IdPosition
+            select new StaffModel
+            {
+                IdEmployee = s.IdEmployee,
+                IdPosition = s.IdPosition,
+                Position = p!.Title,
+                LastName = s.LastName,
+                FirstName = s.FirstName,
+                MiddleName = s.MiddleName,
+                PhoneNumber = s.PhoneNumber,
+            };
 
-        return allStaffDto.ToList();
+        return staffModels.ToList();
     }
 
     public async Task<StaffModel?> GetById(int id)
@@ -40,7 +38,7 @@ public class StaffService(IStaffRepository staffRepository, IPositionsRepository
         var staff = await staffRepository.GetById(id);
         if (staff == null) return null;
         var position = await positionsRepository.GetById(staff.IdPosition);
-        var staffDto = new StaffModel
+        var staffModel = new StaffModel
         {
             IdEmployee = staff.IdEmployee,
             IdPosition = staff.IdPosition,
@@ -50,16 +48,16 @@ public class StaffService(IStaffRepository staffRepository, IPositionsRepository
             MiddleName = staff.MiddleName,
             PhoneNumber = staff.PhoneNumber,
         };
-        
-        return staffDto;
+
+        return staffModel;
     }
-    
+
     public async Task<StaffModel?> GetByLogin(string login)
     {
         var staff = await staffRepository.GetByLogin(login);
         if (staff == null) return null;
         var position = await positionsRepository.GetById(staff.IdPosition);
-        var staffDto = new StaffModel
+        var staffModel = new StaffModel
         {
             IdEmployee = staff.IdEmployee,
             IdPosition = staff.IdPosition,
@@ -69,7 +67,7 @@ public class StaffService(IStaffRepository staffRepository, IPositionsRepository
             MiddleName = staff.MiddleName,
             PhoneNumber = staff.PhoneNumber,
         };
-        
-        return staffDto;
+
+        return staffModel;
     }
 }
