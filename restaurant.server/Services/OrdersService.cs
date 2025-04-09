@@ -21,16 +21,19 @@ public class OrdersService(
         var orders = await ordersRepository.GetAll();
         var statuses = await statusesRepository.GetAll();
         var tables = await tablesRepository.GetAll();
+        var employees = await staffService.GetByPosition("Официант");
 
         var orderModels = from o in orders
             join s in statuses on o.IdStatus equals s.IdStatus
             join t in tables on o.IdTable equals t.IdTable
+            join e in employees on o.IdEmployee equals e.IdEmployee
             select new OrderModel
             {
                 IdOrder = o.IdOrder,
                 Date = o.Date,
                 TableNumber = t.Number,
                 Status = s.Title,
+                Employee = $"{e.LastName} {e.FirstName} {e.MiddleName}"
             };
 
         return orderModels.ToList();
