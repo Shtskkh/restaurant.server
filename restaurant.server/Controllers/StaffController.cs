@@ -6,7 +6,6 @@ namespace restaurant.server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Админ")]
 public class StaffController(IStaffService staffService) : Controller
 {
     [HttpGet]
@@ -30,6 +29,13 @@ public class StaffController(IStaffService staffService) : Controller
         var staff = await staffService.GetByLogin(login);
         if (staff == null)
             return NotFound();
+        return Ok(staff);
+    }
+
+    [HttpGet("position/{position}")]
+    public async Task<IActionResult> GetByPosition(string position)
+    {
+        var staff = await staffService.GetByPosition(position);
         return Ok(staff);
     }
 }

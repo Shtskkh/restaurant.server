@@ -9,6 +9,7 @@ public interface IStaffRepository
     Task<List<Staff>> GetAll();
     Task<Staff?> GetById(int id);
     Task<Staff?> GetByLogin(string login);
+    Task<List<Staff>> GetByPosition(int idPosition);
     Task Add(Staff staff);
     Task Update(Staff staff);
     Task Delete(int id);
@@ -29,6 +30,11 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
     public async Task<Staff?> GetByLogin(string login)
     {
         return await context.Staff.AsNoTracking().FirstOrDefaultAsync(s => s.Login == login);
+    }
+
+    public async Task<List<Staff>> GetByPosition(int idPosition)
+    {
+        return await context.Staff.AsNoTracking().Where(s => s.IdPosition == idPosition).ToListAsync();
     }
 
     public async Task Add(Staff staff)
