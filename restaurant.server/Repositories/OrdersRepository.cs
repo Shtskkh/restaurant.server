@@ -33,7 +33,7 @@ public class OrdersRepository(RestaurantContext context) : IOrdersRepository
 
     public async Task Update(Order order)
     {
-        context.Entry(order).State = EntityState.Modified;
+        context.Orders.Entry(order).State = EntityState.Modified;
         await context.SaveChangesAsync();
     }
 

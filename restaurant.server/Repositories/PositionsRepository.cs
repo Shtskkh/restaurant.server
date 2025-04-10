@@ -39,7 +39,7 @@ public class PositionsRepository(RestaurantContext context) : IPositionsReposito
 
     public async Task Update(Position position)
     {
-        context.Entry(position).State = EntityState.Modified;
+        context.Positions.Entry(position).State = EntityState.Modified;
         await context.SaveChangesAsync();
     }
 

@@ -32,7 +32,7 @@ public class StatusesRepository(RestaurantContext context) : IStatusesRepository
 
     public async Task Update(Status status)
     {
-        context.Entry(status).State = EntityState.Modified;
+        context.Statuses.Entry(status).State = EntityState.Modified;
         await context.SaveChangesAsync();
     }
 

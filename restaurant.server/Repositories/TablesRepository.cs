@@ -33,7 +33,7 @@ public class TablesRepository(RestaurantContext context) : ITablesRepository
 
     public async Task Update(Table table)
     {
-        context.Entry(table).State = EntityState.Modified;
+        context.Tables.Entry(table).State = EntityState.Modified;
         await context.SaveChangesAsync();
     }
 

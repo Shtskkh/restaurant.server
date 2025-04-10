@@ -45,7 +45,7 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
 
     public async Task Update(Staff staff)
     {
-        context.Entry(staff).State = EntityState.Modified;
+        context.Staff.Entry(staff).State = EntityState.Modified;
         await context.SaveChangesAsync();
     }
 
