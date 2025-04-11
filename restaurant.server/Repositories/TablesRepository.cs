@@ -27,8 +27,15 @@ public class TablesRepository(RestaurantContext context) : ITablesRepository
 
     public async Task Add(Table table)
     {
-        context.Tables.Add(table);
-        await context.SaveChangesAsync();
+        try
+        {
+            context.Tables.Add(table);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new Exception("Не удалось добавить стол.");
+        }
     }
 
     public async Task Update(Table table)

@@ -26,8 +26,15 @@ public class StatusesRepository(RestaurantContext context) : IStatusesRepository
 
     public async Task Add(Status status)
     {
-        context.Statuses.Add(status);
-        await context.SaveChangesAsync();
+        try
+        {
+            context.Statuses.Add(status);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new Exception("Не удалось добавить статус.");
+        }
     }
 
     public async Task Update(Status status)

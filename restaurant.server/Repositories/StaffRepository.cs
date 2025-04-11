@@ -16,7 +16,7 @@ public interface IStaffRepository
 }
 
 public class StaffRepository(RestaurantContext context) : IStaffRepository
-{ 
+{
     public async Task<List<Staff>> GetAll()
     {
         return await context.Staff.AsNoTracking().ToListAsync();
@@ -39,8 +39,15 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
 
     public async Task Add(Staff staff)
     {
-        context.Staff.Add(staff);
-        await context.SaveChangesAsync();
+        try
+        {
+            context.Staff.Add(staff);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new Exception("Не удалось добавить сотрудника.");
+        }
     }
 
     public async Task Update(Staff staff)

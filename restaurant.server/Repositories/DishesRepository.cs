@@ -33,8 +33,15 @@ public class DishesRepository(RestaurantContext context) : IDishesRepository
     
     public async Task Add(Dish dish)
     {
-        context.Dishes.Add(dish);
-        await context.SaveChangesAsync();
+        try
+        {
+            context.Dishes.Add(dish);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new Exception("Не удалось добавить продукт.");
+        }
     }
 
     public async Task Update(Dish dish)

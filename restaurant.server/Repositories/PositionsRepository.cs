@@ -6,7 +6,7 @@ namespace restaurant.server.Repositories;
 
 public interface IPositionsRepository
 {
-    Task<List<Position>> GetAll(); 
+    Task<List<Position>> GetAll();
     Task<Position?> GetById(int id);
     Task<Position?> GetByTitle(string title);
     Task Add(Position position);
@@ -33,8 +33,15 @@ public class PositionsRepository(RestaurantContext context) : IPositionsReposito
 
     public async Task Add(Position position)
     {
-        context.Positions.Add(position);
-        await context.SaveChangesAsync();
+        try
+        {
+            context.Positions.Add(position);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new Exception("Не удалось добавить должность");
+        }
     }
 
     public async Task Update(Position position)

@@ -27,8 +27,15 @@ public class OrdersRepository(RestaurantContext context) : IOrdersRepository
 
     public async Task Add(Order order)
     {
-        context.Orders.Add(order);
-        await context.SaveChangesAsync();
+        try
+        {
+            context.Orders.Add(order);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new Exception("Не удалось добавить заказ");
+        }
     }
 
     public async Task Update(Order order)
