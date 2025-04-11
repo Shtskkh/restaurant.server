@@ -58,7 +58,7 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
 
     public async Task Delete(int id)
     {
-        var staff = await context.Staff.FirstOrDefaultAsync(s => s.IdPosition == id);
+        var staff = await GetById(id);
         if (staff != null)
         {
             context.Staff.Remove(staff);
