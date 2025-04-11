@@ -75,6 +75,7 @@ public class StaffService(IStaffRepository staffRepository, IPositionsRepository
     public async Task<List<StaffModel>> GetByPosition(string pos)
     {
         var position = await positionsRepository.GetByTitle(pos);
+        if (position == null) return [];
         var staff = await staffRepository.GetByPosition(position.IdPosition);
         var staffModels = from s in staff
             select new StaffModel

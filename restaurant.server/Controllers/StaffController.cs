@@ -36,6 +36,8 @@ public class StaffController(IStaffService staffService) : Controller
     public async Task<IActionResult> GetByPosition(string position)
     {
         var staff = await staffService.GetByPosition(position);
+        if (staff.Count == 0)
+            return NotFound();
         return Ok(staff);
     }
 }
