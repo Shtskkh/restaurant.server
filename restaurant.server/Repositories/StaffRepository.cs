@@ -52,7 +52,11 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
 
     public async Task Update(Staff staff)
     {
-        context.Staff.Entry(staff).State = EntityState.Modified;
+        var existingStaff = await GetById(staff.IdEmployee);
+        if (existingStaff == null)
+            throw new Exception("Сотрудник не найден.");
+        
+        context.Staff.Entry(existingStaff).CurrentValues.SetValues(staff);
         await context.SaveChangesAsync();
     }
 

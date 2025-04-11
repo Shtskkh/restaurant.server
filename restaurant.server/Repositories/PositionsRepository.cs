@@ -46,7 +46,11 @@ public class PositionsRepository(RestaurantContext context) : IPositionsReposito
 
     public async Task Update(Position position)
     {
-        context.Positions.Entry(position).State = EntityState.Modified;
+        var existingPosition = await GetById(position.IdPosition);
+        if (existingPosition == null)
+            throw new Exception("Должность не найдена.");
+        
+        context.Positions.Entry(existingPosition).CurrentValues.SetValues(position);
         await context.SaveChangesAsync();
     }
 

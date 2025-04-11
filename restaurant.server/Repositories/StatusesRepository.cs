@@ -39,7 +39,11 @@ public class StatusesRepository(RestaurantContext context) : IStatusesRepository
 
     public async Task Update(Status status)
     {
-        context.Statuses.Entry(status).State = EntityState.Modified;
+        var existingStatus = await GetById(status.IdStatus);
+        if (existingStatus == null)
+            throw new Exception("Статус не найден");
+        
+        context.Statuses.Entry(status).CurrentValues.SetValues(status);
         await context.SaveChangesAsync();
     }
 

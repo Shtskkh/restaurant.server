@@ -40,7 +40,11 @@ public class OrdersRepository(RestaurantContext context) : IOrdersRepository
 
     public async Task Update(Order order)
     {
-        context.Orders.Entry(order).State = EntityState.Modified;
+        var existingOrder = await GetById(order.IdOrder);
+        if (existingOrder == null)
+            throw new Exception("Заказ не найден.");
+        
+        context.Orders.Entry(order).CurrentValues.SetValues(order);
         await context.SaveChangesAsync();
     }
 

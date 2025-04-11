@@ -40,7 +40,12 @@ public class TablesRepository(RestaurantContext context) : ITablesRepository
 
     public async Task Update(Table table)
     {
-        context.Tables.Entry(table).State = EntityState.Modified;
+        var existingTable = await GetById(table.IdTable);
+        
+        if (existingTable == null) 
+            throw new Exception("Продукт не найден");
+        
+        context.Tables.Entry(existingTable).CurrentValues.SetValues(table);
         await context.SaveChangesAsync();
     }
 

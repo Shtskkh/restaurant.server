@@ -46,7 +46,11 @@ public class DishesRepository(RestaurantContext context) : IDishesRepository
 
     public async Task Update(Dish dish)
     {
-        context.Dishes.Entry(dish).State = EntityState.Modified;
+        var existingDish = await GetById(dish.IdDish);
+        if (existingDish == null)
+            throw new Exception("Блюдо не найдено.");
+        
+        context.Dishes.Entry(existingDish).CurrentValues.SetValues(dish);
         await context.SaveChangesAsync();
     }
 
