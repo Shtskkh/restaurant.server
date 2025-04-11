@@ -9,8 +9,8 @@ using restaurant.server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContextPool<RestaurantContext>(opt => 
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("RestaurantContext"), 
+builder.Services.AddDbContextPool<RestaurantContext>(opt =>
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("RestaurantContext"),
         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettingsModel>();
@@ -28,6 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
         };
     });
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
@@ -36,6 +37,8 @@ builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<ITablesRepository, TablesRepository>();
 builder.Services.AddScoped<IStatusesRepository, StatusesRepository>();
 builder.Services.AddScoped<IDishesRepository, DishesRepository>();
+builder.Services.AddScoped<IProductRepository, ProductsRepository>();
+
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
