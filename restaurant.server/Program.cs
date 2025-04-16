@@ -21,8 +21,10 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 builder.Services.AddScoped<IStaffService, StaffService>();
+builder.Services.AddScoped<IOrderService, OrdersService>();
 
 builder.Services.AddControllers();
 
