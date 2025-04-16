@@ -17,4 +17,17 @@ public class OrdersController(IOrderService orderService) : Controller
         
         return Ok(orders);
     }
+
+    [HttpGet("GetById/{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        if (id <= 0)
+            throw new ArgumentException("Неверный id");
+        
+        var order = await orderService.GetById(id);
+        if (order == null)
+            return NotFound();
+        
+        return Ok(order);
+    }
 }

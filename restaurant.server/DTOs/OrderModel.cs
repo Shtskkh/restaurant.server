@@ -1,4 +1,6 @@
-﻿namespace restaurant.server.DTOs;
+﻿using restaurant.server.Controllers;
+
+namespace restaurant.server.DTOs;
 
 public class OrderModel
 {
@@ -7,4 +9,5 @@ public class OrderModel
     public required int TableNumber { get; set; }
     public required string Status { get; set; }
     public required string Employee { get; set; }
+    public List<DishInOrderModel>? Dishes { get; set; }
 }
