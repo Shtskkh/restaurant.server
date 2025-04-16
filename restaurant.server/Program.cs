@@ -9,6 +9,4 @@ builder.Services.AddDbContextPool<RestaurantContext>(opt =>
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
-
 app.Run();
