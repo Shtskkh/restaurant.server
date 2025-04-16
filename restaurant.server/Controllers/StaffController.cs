@@ -18,4 +18,17 @@ public class StaffController(IStaffService staffService) : Controller
         
         return Ok(staff);
     }
+
+    [HttpGet("GetById/{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        if (id <= 0)
+            throw new ArgumentException("Неверный id");
+        
+        var staff = await staffService.GetById(id);
+        if (staff == null)
+            return NotFound();
+        
+        return Ok(staff);
+    }
 }

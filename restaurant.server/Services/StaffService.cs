@@ -7,6 +7,7 @@ namespace restaurant.server.Services;
 public interface IStaffService
 {
     Task<List<StaffModel>> GetAll();
+    Task<StaffModel?> GetById(int id);
 }
 
 public class StaffService(IStaffRepository staffRepository) : IStaffService
@@ -27,4 +28,24 @@ public class StaffService(IStaffRepository staffRepository) : IStaffService
         
         return staffModels.ToList();
     }
+
+    public async Task<StaffModel?> GetById(int id)
+    {
+        var staff = await staffRepository.GetById(id);
+        if (staff == null)
+            return null;
+
+        var staffModel = new StaffModel
+        {
+            IdEmployee = staff.IdEmployee,
+            Position = staff.IdPositionNavigation.Title,
+            LastName = staff.LastName,
+            FirstName = staff.FirstName,
+            MiddleName = staff.MiddleName,
+            PhoneNumber = staff.PhoneNumber
+        };
+        
+        return staffModel;
+    }
+    
 }
