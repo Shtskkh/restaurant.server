@@ -31,4 +31,17 @@ public class StaffController(IStaffService staffService) : Controller
         
         return Ok(staff);
     }
+
+    [HttpGet("GetByLogin/{login}")]
+    public async Task<IActionResult> GetByLogin(string login)
+    {
+        if (string.IsNullOrWhiteSpace(login))
+            return BadRequest();
+        
+        var staff = await staffService.GetByLogin(login);
+        if (staff == null)
+            return NotFound();
+        
+        return Ok(staff);
+    }
 }

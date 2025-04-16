@@ -8,6 +8,7 @@ public interface IStaffRepository
 {
     Task<IEnumerable<Staff>> GetAll();
     Task<Staff?> GetById(int id);
+    Task<Staff?> GetByLogin(string login);
 }
 
 public class StaffRepository(RestaurantContext context) : IStaffRepository
@@ -21,5 +22,11 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
     {
         return await context.Staff.AsNoTracking().Include(s => s.IdPositionNavigation)
             .FirstOrDefaultAsync(s => s.IdEmployee == id);
+    }
+
+    public async Task<Staff?> GetByLogin(string login)
+    {
+        return await context.Staff.AsNoTracking().Include(s => s.IdPositionNavigation)
+            .FirstOrDefaultAsync(s => s.Login == login);
     }
 }
