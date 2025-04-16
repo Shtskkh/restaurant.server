@@ -44,4 +44,17 @@ public class StaffController(IStaffService staffService) : Controller
         
         return Ok(staff);
     }
+    
+    [HttpGet("Position/{position}")]
+    public async Task<IActionResult> GetByPosition(string position)
+    {
+        if (string.IsNullOrWhiteSpace(position))
+            return BadRequest();
+        
+        var staff = await staffService.GetByPosition(position);
+        if (staff.Count == 0)
+            return NotFound();
+        
+        return Ok(staff);
+    }
 }

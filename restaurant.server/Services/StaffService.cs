@@ -9,6 +9,7 @@ public interface IStaffService
     Task<List<StaffModel>> GetAll();
     Task<StaffModel?> GetById(int id);
     Task<StaffModel?> GetByLogin(string login);
+    Task<List<StaffModel>> GetByPosition(string position);
 }
 
 public class StaffService(IStaffRepository staffRepository) : IStaffService
@@ -66,5 +67,22 @@ public class StaffService(IStaffRepository staffRepository) : IStaffService
         };
 
         return staffModel;
+    }
+
+    public async Task<List<StaffModel>> GetByPosition(string position)
+    {
+        var staff = await staffRepository.GetByPosition(position);
+        
+        var staffModels = staff.Select(s => new StaffModel
+        {
+            IdEmployee = s.IdEmployee,
+            Position = s.IdPositionNavigation.Title,
+            LastName = s.LastName,
+            FirstName = s.FirstName,
+            MiddleName = s.MiddleName,
+            PhoneNumber = s.PhoneNumber
+        });
+        
+        return staffModels.ToList();
     }
 }
