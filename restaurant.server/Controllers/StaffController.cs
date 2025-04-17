@@ -19,7 +19,7 @@ public class StaffController(IStaffService staffService) : Controller
         return Ok(staff);
     }
 
-    [HttpGet("GetById/{id}")]
+    [HttpGet("GetById/{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         if (id <= 0)

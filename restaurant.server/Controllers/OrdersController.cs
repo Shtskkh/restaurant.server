@@ -18,7 +18,7 @@ public class OrdersController(IOrderService orderService) : Controller
         return Ok(orders);
     }
 
-    [HttpGet("GetById/{id}")]
+    [HttpGet("GetById/{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         if (id <= 0)
