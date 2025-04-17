@@ -15,7 +15,8 @@ public class OrdersService(IOrdersRepository ordersRepository) : IOrderService
 {
     public async Task<List<OrderModel>> GetAll()
     {
-        return await ordersRepository.GetAll();
+        var orders = await ordersRepository.GetAll();
+        return orders.ToList();
     }
 
     public async Task<OrderModel?> GetById(int id)
@@ -25,7 +26,7 @@ public class OrdersService(IOrdersRepository ordersRepository) : IOrderService
             return null;
         
         var dishes = await ordersRepository.GetDishesInOrder(id);
-        order.Dishes = dishes;
+        order.Dishes = dishes.ToList();
         
         return order;
     }

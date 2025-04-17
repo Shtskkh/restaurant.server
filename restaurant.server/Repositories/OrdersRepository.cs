@@ -8,14 +8,14 @@ namespace restaurant.server.Repositories;
 
 public interface IOrdersRepository
 {
-    Task<List<OrderModel>> GetAll();
+    Task<IEnumerable<OrderModel>> GetAll();
     Task<OrderModel?> GetById(int id);
-    Task<List<DishInOrderModel>> GetDishesInOrder(int id);
+    Task<IEnumerable<DishInOrderModel>> GetDishesInOrder(int id);
 }
 
 public class OrdersRepository(RestaurantContext context) : IOrdersRepository
 {
-    public async Task<List<OrderModel>> GetAll()
+    public async Task<IEnumerable<OrderModel>> GetAll()
     {
         var orders =
             from order in context.Orders.AsNoTracking()
@@ -60,7 +60,7 @@ public class OrdersRepository(RestaurantContext context) : IOrdersRepository
         return await orders.FirstOrDefaultAsync();
     }
 
-    public async Task<List<DishInOrderModel>> GetDishesInOrder(int id)
+    public async Task<IEnumerable<DishInOrderModel>> GetDishesInOrder(int id)
     {
         var dishes =
             from orderDish in context.DishesInOrders.AsNoTracking()
