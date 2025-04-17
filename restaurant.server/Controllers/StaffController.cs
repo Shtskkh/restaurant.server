@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using restaurant.server.DTOs;
 using restaurant.server.Repositories;
 using restaurant.server.Services;
 
@@ -9,6 +10,7 @@ namespace restaurant.server.Controllers;
 public class StaffController(IStaffService staffService) : Controller
 {
     [HttpGet("GetAll")]
+    [ProducesResponseType(typeof(List<StaffModel>), 200)]
     public async Task<IActionResult> GetAll()
     {
         var staff = await staffService.GetAll();
@@ -20,6 +22,7 @@ public class StaffController(IStaffService staffService) : Controller
     }
 
     [HttpGet("GetById/{id:int}")]
+    [ProducesResponseType(typeof(StaffModel), 200)]
     public async Task<IActionResult> GetById(int id)
     {
         if (id <= 0)
@@ -33,6 +36,7 @@ public class StaffController(IStaffService staffService) : Controller
     }
 
     [HttpGet("GetByLogin/{login}")]
+    [ProducesResponseType(typeof(StaffModel), 200)]
     public async Task<IActionResult> GetByLogin(string login)
     {
         if (string.IsNullOrWhiteSpace(login))
@@ -46,6 +50,7 @@ public class StaffController(IStaffService staffService) : Controller
     }
     
     [HttpGet("Position/{position}")]
+    [ProducesResponseType(typeof(StaffModel), 200)]
     public async Task<IActionResult> GetByPosition(string position)
     {
         if (string.IsNullOrWhiteSpace(position))

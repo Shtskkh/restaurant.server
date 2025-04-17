@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using restaurant.server.DTOs;
+using restaurant.server.Models;
 using restaurant.server.Services;
 
 namespace restaurant.server.Controllers;
@@ -8,6 +10,7 @@ namespace restaurant.server.Controllers;
 public class DishesController(IDishesService dishesService) : Controller
 {
     [HttpGet("GetAll")]
+    [ProducesResponseType(typeof(List<DishModel>), 200)]
     public async Task<IActionResult> GetAll()
     {
         var dishes = await dishesService.GetAll();
