@@ -26,7 +26,7 @@ public class StaffController(IStaffService staffService) : Controller
     public async Task<IActionResult> GetById(int id)
     {
         if (id <= 0)
-            throw new ArgumentException("Неверный id");
+            return BadRequest();
         
         var staff = await staffService.GetById(id);
         if (staff == null)

@@ -25,7 +25,7 @@ public class OrdersController(IOrderService orderService) : Controller
     public async Task<IActionResult> GetById(int id)
     {
         if (id <= 0)
-            throw new ArgumentException("Неверный id");
+            return BadRequest();
         
         var order = await orderService.GetById(id);
         if (order == null)
