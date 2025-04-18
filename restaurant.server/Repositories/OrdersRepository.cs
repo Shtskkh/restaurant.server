@@ -39,25 +39,25 @@ public class OrdersRepository(RestaurantContext context) : IOrdersRepository
 
     public async Task<OrderModel?> GetById(int id)
     {
-        var orders =
-            from order in context.Orders.AsNoTracking()
-            where order.IdOrder == id
+        var order =
+            from o in context.Orders.AsNoTracking()
+            where o.IdOrder == id
             join table in context.Tables.AsNoTracking()
-                on order.IdTable equals table.IdTable
+                on o.IdTable equals table.IdTable
             join status in context.Statuses.AsNoTracking()
-                on order.IdStatus equals status.IdStatus
+                on o.IdStatus equals status.IdStatus
             join employee in context.Staff.AsNoTracking()
-                on order.IdEmployee equals employee.IdEmployee
+                on o.IdEmployee equals employee.IdEmployee
             select new OrderModel
             { 
-                IdOrder = order.IdOrder,
-                Date = order.Date,
+                IdOrder = o.IdOrder,
+                Date = o.Date,
                 TableNumber = table.Number,
                 Status = status.Title,
                 Employee = $"{employee.LastName} {employee.FirstName} {employee.MiddleName}"
             };
         
-        return await orders.FirstOrDefaultAsync();
+        return await order.FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<DishInOrderModel>> GetDishesInOrder(int id)
