@@ -20,4 +20,18 @@ public class DishesController(IDishesService dishesService) : Controller
         
         return Ok(dishes);
     }
+    
+    [HttpGet("GetById/{id:int}")]
+    [ProducesResponseType(typeof(DishModel), 200)]
+    public async Task<IActionResult> GetById(int id)
+    {
+        if (id <= 0)
+            return BadRequest();
+        
+        var dish = await dishesService.GetById(id);
+        if (dish == null)
+            return NotFound();
+        
+        return Ok(dish);
+    }
 }
