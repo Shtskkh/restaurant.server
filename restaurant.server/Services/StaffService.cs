@@ -9,7 +9,7 @@ public interface IStaffService
     Task<StaffModel?> GetById(int id);
 }
 
-public class StaffService(StaffRepository staffRepository) : IStaffService
+public class StaffService(IStaffRepository staffRepository) : IStaffService
 {
     public async Task<List<StaffModel>> GetAll()
     {
