@@ -15,6 +15,7 @@ builder.Services.AddScoped<IDishesRepository, DishesRepository>();
 
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IDishesService, DishesService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
