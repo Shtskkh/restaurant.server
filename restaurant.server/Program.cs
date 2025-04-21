@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using restaurant.server.Context;
 using restaurant.server.Repositories;
+using restaurant.server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddDbContextPool<RestaurantContext>(opt =>
         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+
+builder.Services.AddScoped<IStaffService, StaffService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
