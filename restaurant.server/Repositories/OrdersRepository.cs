@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using restaurant.server.Context;
-using restaurant.server.Controllers;
+using restaurant.server.DTOs;
 
 namespace restaurant.server.Repositories;
 

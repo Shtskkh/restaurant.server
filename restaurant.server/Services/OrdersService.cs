@@ -1,4 +1,4 @@
-﻿using restaurant.server.Controllers;
+﻿using restaurant.server.DTOs;
 using restaurant.server.Repositories;
 
 namespace restaurant.server.Services;

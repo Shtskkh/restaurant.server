@@ -1,4 +1,4 @@
-﻿namespace restaurant.server.Controllers;
+﻿namespace restaurant.server.DTOs;
 
 public class DishInOrderModel
 {
