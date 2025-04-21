@@ -28,11 +28,19 @@ public class StaffController(IStaffService staffService) : Controller
     public async Task<IActionResult> GetById(int id)
     {
         if (id < 1)
-            return BadRequest();
+            return BadRequest(new ProblemDetails
+            {
+                Title = "ID должен быть больше 0.",
+                Status = 400
+            });
         
         var staff = await staffService.GetById(id);
         if (staff == null)
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Сотрудник с таким ID не найден.",
+                Status = 404
+            });
         
         return Ok(staff);
     }
