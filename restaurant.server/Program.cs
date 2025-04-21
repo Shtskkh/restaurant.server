@@ -10,6 +10,7 @@ builder.Services.AddDbContextPool<RestaurantContext>(opt =>
         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 builder.Services.AddScoped<IStaffService, StaffService>();
 
