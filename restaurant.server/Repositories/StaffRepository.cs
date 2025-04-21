@@ -6,13 +6,13 @@ namespace restaurant.server.Repositories;
 
 public interface IStaffRepository
 {
-    Task<IEnumerable<StaffModel>> GetAll();
+    Task<List<StaffModel>> GetAll();
     Task<StaffModel?> GetById(int idEmployee);
 }
 
 public class StaffRepository(RestaurantContext context) : IStaffRepository
 {
-    public async Task<IEnumerable<StaffModel>> GetAll()
+    public async Task<List<StaffModel>> GetAll()
     {
         var staffModels =
             from s in context.Staff.AsNoTracking()
