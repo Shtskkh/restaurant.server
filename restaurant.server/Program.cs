@@ -5,6 +5,11 @@ using restaurant.server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(7280, listenOptions => listenOptions.UseHttps());
+});
+
 builder.Services.AddDbContextPool<RestaurantContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("RestaurantContext"),
         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
