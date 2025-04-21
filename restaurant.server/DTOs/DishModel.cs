@@ -8,4 +8,5 @@ public class DishModel
     public required bool Availability { get; set; }
     public required decimal WeightVolume { get; set; }
     public required string Unit { get; set; }
+    public List<ProductInDishModel>? Products { get; set; }
 }
