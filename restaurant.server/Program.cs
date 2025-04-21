@@ -13,6 +13,7 @@ builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 builder.Services.AddScoped<IStaffService, StaffService>();
+builder.Services.AddScoped<IOrdersService, OrdersService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
