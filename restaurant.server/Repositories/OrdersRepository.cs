@@ -4,14 +4,14 @@ using restaurant.server.Controllers;
 
 namespace restaurant.server.Repositories;
 
-public interface IOrderRepository
+public interface IOrdersRepository
 {
     Task<List<OrderModel>> GetAll();
     Task<OrderModel?> GetById(int idOrder);
     Task<List<DishInOrderModel>> GetDishesInOrder(int idOrder);
 }
 
-public class OrdersRepository(RestaurantContext context) : IOrderRepository
+public class OrdersRepository(RestaurantContext context) : IOrdersRepository
 {
     public async Task<List<OrderModel>> GetAll()
     {
