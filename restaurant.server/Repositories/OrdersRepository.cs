@@ -11,7 +11,7 @@ public interface IOrderRepository
     Task<List<DishInOrderModel>> GetDishesInOrder(int idOrder);
 }
 
-public class OrdersRepository(RestaurantContext context)
+public class OrdersRepository(RestaurantContext context) : IOrderRepository
 {
     public async Task<List<OrderModel>> GetAll()
     {
