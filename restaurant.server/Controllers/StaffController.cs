@@ -18,7 +18,7 @@ public class StaffController(IStaffService staffService) : Controller
         if (staff.Count == 0)
             return NoContent();
         
-        return Ok(await staffService.GetAll());
+        return Ok(staff);
     }
     
     [HttpGet("GetById/{id:int}")]
