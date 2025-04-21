@@ -3,7 +3,13 @@ using restaurant.server.Repositories;
 
 namespace restaurant.server.Services;
 
-public class StaffService(StaffRepository staffRepository)
+public interface IStaffService
+{
+    Task<List<StaffModel>> GetAll();
+    Task<StaffModel?> GetById(int id);
+}
+
+public class StaffService(StaffRepository staffRepository) : IStaffService
 {
     public async Task<List<StaffModel>> GetAll()
     {
