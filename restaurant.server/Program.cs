@@ -10,6 +10,8 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenLocalhost(7280, listenOptions => listenOptions.UseHttps());
 });
 
+builder.Services.AddCors();
+
 builder.Services.AddDbContextPool<RestaurantContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("RestaurantContext"),
         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
@@ -34,6 +36,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin());
 
 app.MapControllers();
 
