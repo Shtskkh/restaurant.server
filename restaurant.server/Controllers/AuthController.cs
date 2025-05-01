@@ -20,7 +20,7 @@ public class AuthController(IAuthService authService) : Controller
         if (string.IsNullOrEmpty(token))
             return NotFound(new ProblemDetails
             {
-                Detail = "Неверный логин или пароль.",
+                Title = "Неверный логин или пароль.",
                 Status = 404
             });
         
