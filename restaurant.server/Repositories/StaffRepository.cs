@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using restaurant.server.Context;
 using restaurant.server.DTOs;
+using restaurant.server.Models;
 
 namespace restaurant.server.Repositories;
 
@@ -8,6 +9,7 @@ public interface IStaffRepository
 {
     Task<List<StaffModel>> GetAll();
     Task<StaffModel?> GetById(int idEmployee);
+    Task<Staff?> GetLoginInfo(string login);
 }
 
 public class StaffRepository(RestaurantContext context) : IStaffRepository
@@ -49,5 +51,10 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
             };
 
         return await staffModel.FirstOrDefaultAsync();
+    }
+
+    public async Task<Staff?> GetLoginInfo(string login)
+    {
+        return await context.Staff.AsNoTracking().FirstOrDefaultAsync(s => s.Login == login);
     }
 }
