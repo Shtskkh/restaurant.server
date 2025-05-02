@@ -10,12 +10,14 @@ namespace restaurant.server.Controllers;
 public class AuthController(IAuthService authService) : Controller
 {
     [HttpPost("login")]
+    [ProducesResponseType(typeof(AuthSuccessResponseModel), 200)]
+    [ProducesResponseType(400)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> Authenticate([FromForm] AuthRequestModel request)
+    public async Task<IActionResult> Authenticate([FromBody] AuthRequestModel request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         var token = await authService.Authenticate(request.Login, request.Password);
         if (string.IsNullOrEmpty(token))
             return NotFound(new ProblemDetails
@@ -23,7 +25,7 @@ public class AuthController(IAuthService authService) : Controller
                 Title = "Неверный логин или пароль.",
                 Status = 404
             });
-        
-        return Ok(new { access_token = token });
+
+        return Ok(new AuthSuccessResponseModel { Token = token });
     }
 }
