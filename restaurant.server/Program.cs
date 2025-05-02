@@ -64,7 +64,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin());
+app.UseCors(corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin().AllowAnyHeader());
 
 app.UseAuthentication();
 app.UseAuthorization();
