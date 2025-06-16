@@ -40,6 +40,7 @@ builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<IDishesRepository, DishesRepository>();
 builder.Services.AddScoped<ISuppliesRepository, SuppliesRepository>();
+builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
 
 builder.Services.AddSingleton<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();

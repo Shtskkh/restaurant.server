@@ -1,4 +1,5 @@
 ﻿using restaurant.server.DTOs;
+using restaurant.server.Models;
 using restaurant.server.Repositories;
 
 namespace restaurant.server.Services;
@@ -7,9 +8,10 @@ public interface IStaffService
 {
     Task<List<StaffModel>> GetAll();
     Task<StaffModel?> GetById(int id);
+    Task<List<Position>> GetAllPositions();
 }
 
-public class StaffService(IStaffRepository staffRepository) : IStaffService
+public class StaffService(IStaffRepository staffRepository, IPositionsRepository positionsRepository) : IStaffService
 {
     public async Task<List<StaffModel>> GetAll()
     {
@@ -20,5 +22,10 @@ public class StaffService(IStaffRepository staffRepository) : IStaffService
     {
         var staffModel = await staffRepository.GetById(id);
         return staffModel ?? null;
+    }
+
+    public async Task<List<Position>> GetAllPositions()
+    {
+        return await positionsRepository.GetAll();
     }
 }

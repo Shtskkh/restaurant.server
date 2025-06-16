@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using restaurant.server.DTOs;
+using restaurant.server.Models;
 using restaurant.server.Services;
 
 namespace restaurant.server.Controllers;
@@ -11,16 +12,13 @@ public class StaffController(IStaffService staffService) : Controller
 {
     [HttpGet("GetAll")]
     [ProducesResponseType(typeof(List<StaffModel>), 200)]
-    [ProducesResponseType(204)]
     public async Task<IActionResult> GetAll()
     {
         var staff = await staffService.GetAll();
-        if (staff.Count == 0)
-            return NoContent();
-        
+
         return Ok(staff);
     }
-    
+
     [HttpGet("GetById/{id:int}")]
     [ProducesResponseType(typeof(StaffModel), 200)]
     [ProducesResponseType(400)]
@@ -33,7 +31,7 @@ public class StaffController(IStaffService staffService) : Controller
                 Title = "ID должен быть больше 0.",
                 Status = 400
             });
-        
+
         var staff = await staffService.GetById(id);
         if (staff == null)
             return NotFound(new ProblemDetails
@@ -41,7 +39,15 @@ public class StaffController(IStaffService staffService) : Controller
                 Title = "Сотрудник с таким ID не найден.",
                 Status = 404
             });
-        
+
         return Ok(staff);
+    }
+
+    [HttpGet("GetAllPositions")]
+    [ProducesResponseType(typeof(List<Position>), 200)]
+    public async Task<IActionResult> GetAllPositions()
+    {
+        var positions = await staffService.GetAllPositions();
+        return Ok(positions);
     }
 }
