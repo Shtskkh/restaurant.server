@@ -2,6 +2,7 @@
 using restaurant.server.Context;
 using restaurant.server.DTOs;
 using restaurant.server.Models;
+using restaurant.server.Utils;
 
 namespace restaurant.server.Repositories;
 
@@ -10,9 +11,11 @@ public interface IStaffRepository
     Task<List<StaffModel>> GetAll();
     Task<StaffModel?> GetById(int idEmployee);
     Task<Staff?> GetLoginInfo(string login);
+    Task<RepositoryResult<Staff>> Add(Staff newStaff);
 }
 
-public class StaffRepository(RestaurantContext context) : IStaffRepository
+// TODO: Переписать все методы с использованием RepositoryResult
+public class StaffRepository(RestaurantContext context, ILogger<StaffRepository> logger) : IStaffRepository
 {
     public async Task<List<StaffModel>> GetAll()
     {
@@ -29,7 +32,7 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
                 MiddleName = s.MiddleName,
                 PhoneNumber = s.PhoneNumber
             };
-        
+
         return await staffModels.ToListAsync();
     }
 
@@ -56,5 +59,26 @@ public class StaffRepository(RestaurantContext context) : IStaffRepository
     public async Task<Staff?> GetLoginInfo(string login)
     {
         return await context.Staff.AsNoTracking().FirstOrDefaultAsync(s => s.Login == login);
+    }
+
+    public async Task<RepositoryResult<Staff>> Add(Staff newStaff)
+    {
+        try
+        {
+            await context.Staff.AddAsync(newStaff);
+            await context.SaveChangesAsync();
+            logger.LogInformation("Сотрудник успешно добавлен.");
+            return RepositoryResult<Staff>.Success(newStaff);
+        }
+        catch (DbUpdateException ex)
+        {
+            logger.LogError(ex, "Ошибка базы данных при добавлении сотрудника: {Login}", newStaff.Login);
+            return RepositoryResult<Staff>.Fail("Ошибка базы данных: " + ex.InnerException?.Message);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Непредвиденная ошибка при добавлении сотрудника: {Login}", newStaff.Login);
+            return RepositoryResult<Staff>.Fail("Произошла ошибка: " + ex.Message);
+        }
     }
 }

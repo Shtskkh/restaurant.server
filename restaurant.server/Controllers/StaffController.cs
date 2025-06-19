@@ -50,4 +50,19 @@ public class StaffController(IStaffService staffService) : Controller
         var positions = await staffService.GetAllPositions();
         return Ok(positions);
     }
+
+    [HttpPost("Add")]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> Add([FromForm] CreateStaffModel newEmployee)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var staffResult = await staffService.Add(newEmployee);
+
+        if (!staffResult.IsSuccess)
+            return BadRequest(staffResult.ErrorMessage);
+
+        return Ok(staffResult.Data);
+    }
 }
