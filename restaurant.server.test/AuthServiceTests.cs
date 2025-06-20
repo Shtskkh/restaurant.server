@@ -37,18 +37,18 @@ public class AuthServiceTests
         };
 
         _staffRepositoryMock
-            .Setup(repo => repo.GetLoginInfo(login))
+            .Setup(repo => repo.GetLoginInfoAsync(login))
             .ReturnsAsync(staff);
         _jwtServiceMock
             .Setup(jwt => jwt.GenerateJwtToken())
             .Returns(expectedToken);
 
         // Act
-        var result = await _authService.Authenticate(login, password);
+        var result = await _authService.AuthenticateAsync(login, password);
 
         // Assert
         Assert.Equal(expectedToken, result);
-        _staffRepositoryMock.Verify(repo => repo.GetLoginInfo(login), Times.Once());
+        _staffRepositoryMock.Verify(repo => repo.GetLoginInfoAsync(login), Times.Once());
         _jwtServiceMock.Verify(jwt => jwt.GenerateJwtToken(), Times.Once());
     }
 
@@ -60,15 +60,15 @@ public class AuthServiceTests
         var password = "testpass";
 
         _staffRepositoryMock
-            .Setup(repo => repo.GetLoginInfo(login))
+            .Setup(repo => repo.GetLoginInfoAsync(login))
             .ReturnsAsync((Staff)null);
 
         // Act
-        var result = await _authService.Authenticate(login, password);
+        var result = await _authService.AuthenticateAsync(login, password);
 
         // Assert
         Assert.Null(result);
-        _staffRepositoryMock.Verify(repo => repo.GetLoginInfo(login), Times.Once());
+        _staffRepositoryMock.Verify(repo => repo.GetLoginInfoAsync(login), Times.Once());
         _jwtServiceMock.Verify(jwt => jwt.GenerateJwtToken(), Times.Never());
     }
 
@@ -90,15 +90,15 @@ public class AuthServiceTests
         };
 
         _staffRepositoryMock
-            .Setup(repo => repo.GetLoginInfo(login))
+            .Setup(repo => repo.GetLoginInfoAsync(login))
             .ReturnsAsync(staff);
 
         // Act
-        var result = await _authService.Authenticate(login, password);
+        var result = await _authService.AuthenticateAsync(login, password);
 
         // Assert
         Assert.Null(result);
-        _staffRepositoryMock.Verify(repo => repo.GetLoginInfo(login), Times.Once());
+        _staffRepositoryMock.Verify(repo => repo.GetLoginInfoAsync(login), Times.Once());
         _jwtServiceMock.Verify(jwt => jwt.GenerateJwtToken(), Times.Never());
     }
 
@@ -110,7 +110,7 @@ public class AuthServiceTests
     public async Task Authenticate_NullOrEmptyInputs_ReturnsNull(string login, string password)
     {
         // Act
-        var result = await _authService.Authenticate(login, password);
+        var result = await _authService.AuthenticateAsync(login, password);
 
         // Assert
         Assert.Null(result);

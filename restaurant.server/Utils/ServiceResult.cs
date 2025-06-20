@@ -2,9 +2,9 @@
 
 public class ServiceResult<T>
 {
-    public bool IsSuccess { get; set; }
-    public string? ErrorMessage { get; set; }
-    public T? Data { get; set; }
+    public bool IsSuccess { get; private set; }
+    public string? ErrorMessage { get; private set; }
+    public T? Data { get; private set; }
 
     public static ServiceResult<T> Success(T data)
     {

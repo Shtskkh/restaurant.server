@@ -14,7 +14,7 @@ public class OrdersController(IOrdersService ordersService) : Controller
     [ProducesResponseType(204)]
     public async Task<IActionResult> GetAll()
     {
-        var orders = await ordersService.GetAll();
+        var orders = await ordersService.GetAllAsync();
         if (orders.Count == 0)
             return NoContent();
 
@@ -34,7 +34,7 @@ public class OrdersController(IOrdersService ordersService) : Controller
                 Status = 400
             });
 
-        var order = await ordersService.GetById(id);
+        var order = await ordersService.GetByIdAsync(id);
         if (order == null)
             return NotFound(new ProblemDetails
             {

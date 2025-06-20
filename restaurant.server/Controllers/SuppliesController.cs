@@ -14,7 +14,7 @@ public class SuppliesController(ISuppliesService suppliesService) : Controller
     [ProducesResponseType(204)]
     public async Task<IActionResult> GetAll()
     {
-        var supplies = await suppliesService.GetAll();
+        var supplies = await suppliesService.GetAllAsync();
         if (supplies.Count == 0)
             return NoContent();
 

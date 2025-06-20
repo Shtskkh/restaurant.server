@@ -18,7 +18,7 @@ public class AuthController(IAuthService authService) : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var token = await authService.Authenticate(request.Login, request.Password);
+        var token = await authService.AuthenticateAsync(request.Login, request.Password);
         if (string.IsNullOrEmpty(token))
             return NotFound(new ProblemDetails
             {

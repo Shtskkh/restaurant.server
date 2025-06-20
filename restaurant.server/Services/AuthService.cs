@@ -4,14 +4,14 @@ namespace restaurant.server.Services;
 
 public interface IAuthService
 {
-    Task<string?> Authenticate(string login, string password);
+    Task<string?> AuthenticateAsync(string login, string password);
 }
 
 public class AuthService(IStaffRepository staffRepository, IJwtService jwtService) : IAuthService
 {
-    public async Task<string?> Authenticate(string login, string password)
+    public async Task<string?> AuthenticateAsync(string login, string password)
     {
-        var staff = await staffRepository.GetLoginInfo(login);
+        var staff = await staffRepository.GetLoginInfoAsync(login);
         if (staff == null || staff.Password != password)
             return null;
 

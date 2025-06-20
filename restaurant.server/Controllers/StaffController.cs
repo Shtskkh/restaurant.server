@@ -14,7 +14,7 @@ public class StaffController(IStaffService staffService) : Controller
     [ProducesResponseType(typeof(List<StaffModel>), 200)]
     public async Task<IActionResult> GetAll()
     {
-        var staff = await staffService.GetAll();
+        var staff = await staffService.GetAllAsync();
 
         return Ok(staff);
     }
@@ -32,7 +32,7 @@ public class StaffController(IStaffService staffService) : Controller
                 Status = 400
             });
 
-        var staff = await staffService.GetById(id);
+        var staff = await staffService.GetByIdAsync(id);
         if (staff == null)
             return NotFound(new ProblemDetails
             {
@@ -47,7 +47,7 @@ public class StaffController(IStaffService staffService) : Controller
     [ProducesResponseType(typeof(List<Position>), 200)]
     public async Task<IActionResult> GetAllPositions()
     {
-        var positions = await staffService.GetAllPositions();
+        var positions = await staffService.GetAllPositionsAsync();
         return Ok(positions);
     }
 
@@ -59,7 +59,7 @@ public class StaffController(IStaffService staffService) : Controller
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var staffResult = await staffService.Add(newEmployee);
+        var staffResult = await staffService.AddAsync(newEmployee);
 
         if (!staffResult.IsSuccess)
             return BadRequest(staffResult.ErrorMessage);

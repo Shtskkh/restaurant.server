@@ -6,12 +6,12 @@ namespace restaurant.server.Repositories;
 
 public interface ISuppliesRepository
 {
-    Task<List<SupplyModel>> GetAll();
+    Task<List<SupplyModel>> GetAllAsync();
 }
 
 public class SuppliesRepository(RestaurantContext context) : ISuppliesRepository
 {
-    public async Task<List<SupplyModel>> GetAll()
+    public async Task<List<SupplyModel>> GetAllAsync()
     {
         var suppliesModels =
             from supply in context.Supplies.AsNoTracking()

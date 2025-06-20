@@ -5,25 +5,25 @@ namespace restaurant.server.Services;
 
 public interface IDishesService
 {
-    Task<List<DishModel>> GetAll();
-    Task<DishModel?> GetById(int id);
+    Task<List<DishModel>> GetAllAsync();
+    Task<DishModel?> GetByIdAsync(int id);
 }
 
 public class DishesService(IDishesRepository dishesRepository) : IDishesService
 {
-    public async Task<List<DishModel>> GetAll()
+    public async Task<List<DishModel>> GetAllAsync()
     {
-        return await dishesRepository.GetAll();
+        return await dishesRepository.GetAllAsync();
     }
 
-    public async Task<DishModel?> GetById(int id)
+    public async Task<DishModel?> GetByIdAsync(int id)
     {
-        var dishModel = await dishesRepository.GetById(id);
+        var dishModel = await dishesRepository.GetByIdAsync(id);
 
         if (dishModel == null)
             return null;
 
-        var products = await dishesRepository.GetProductsInDish(dishModel.IdDish);
+        var products = await dishesRepository.GetProductsInDishAsync(dishModel.IdDish);
         dishModel.Products = products;
 
         return dishModel;

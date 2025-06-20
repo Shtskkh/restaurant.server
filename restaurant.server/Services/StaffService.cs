@@ -7,10 +7,10 @@ namespace restaurant.server.Services;
 
 public interface IStaffService
 {
-    Task<List<StaffModel>> GetAll();
-    Task<StaffModel?> GetById(int id);
-    Task<List<Position>> GetAllPositions();
-    Task<ServiceResult<int>> Add(CreateStaffModel dto);
+    Task<List<StaffModel>> GetAllAsync();
+    Task<StaffModel?> GetByIdAsync(int id);
+    Task<List<Position>> GetAllPositionsAsync();
+    Task<ServiceResult<int>> AddAsync(CreateStaffModel dto);
 }
 
 public class StaffService(
@@ -18,37 +18,37 @@ public class StaffService(
     IPositionsRepository positionsRepository,
     ILogger<StaffService> logger) : IStaffService
 {
-    public async Task<List<StaffModel>> GetAll()
+    public async Task<List<StaffModel>> GetAllAsync()
     {
-        return await staffRepository.GetAll();
+        return await staffRepository.GetAllAsync();
     }
 
-    public async Task<StaffModel?> GetById(int id)
+    public async Task<StaffModel?> GetByIdAsync(int id)
     {
-        var staffModel = await staffRepository.GetById(id);
+        var staffModel = await staffRepository.GetByIdAsync(id);
         return staffModel ?? null;
     }
 
-    public async Task<List<Position>> GetAllPositions()
+    public async Task<List<Position>> GetAllPositionsAsync()
     {
-        return await positionsRepository.GetAll();
+        return await positionsRepository.GetAllAsync();
     }
 
-    public async Task<ServiceResult<int>> Add(CreateStaffModel dto)
+    public async Task<ServiceResult<int>> AddAsync(CreateStaffModel dto)
     {
         logger.LogDebug("Начало создания сотрудника с логином: {Login}", dto.Login);
 
-        if (await staffRepository.GetLoginInfo(dto.Login) != null)
+        if (await staffRepository.GetLoginInfoAsync(dto.Login) != null)
         {
             logger.LogWarning("Попытка создать сотрудника с уже существующим логином: {Login}", dto.Login);
             return ServiceResult<int>.Fail("Пользователь с таким логином уже существует.");
         }
 
-        var position = await positionsRepository.GetByTitle(dto.Position);
+        var position = await positionsRepository.GetByTitleAsync(dto.Position);
         if (position == null)
         {
             logger.LogInformation("Должность {Position} не найдена, создаём новую", dto.Position);
-            var positionResult = await positionsRepository.Add(dto.Position);
+            var positionResult = await positionsRepository.AddAsync(dto.Position);
 
             if (!positionResult.IsSuccess)
             {
@@ -71,7 +71,7 @@ public class StaffService(
             Password = dto.Password
         };
 
-        var staffResult = await staffRepository.Add(staff);
+        var staffResult = await staffRepository.AddAsync(staff);
         if (!staffResult.IsSuccess)
         {
             logger.LogError("Не удалось создать сотрудника: {Error}", staffResult.ErrorMessage);

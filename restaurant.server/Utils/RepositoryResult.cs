@@ -4,7 +4,7 @@ public class RepositoryResult<T>
 {
     public bool IsSuccess { get; private set; }
     public string? ErrorMessage { get; private set; }
-    public T? Data { get; set; }
+    public T? Data { get; private set; }
 
     public static RepositoryResult<T> Success(T data)
     {

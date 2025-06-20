@@ -8,16 +8,16 @@ namespace restaurant.server.Repositories;
 
 public interface IStaffRepository
 {
-    Task<List<StaffModel>> GetAll();
-    Task<StaffModel?> GetById(int idEmployee);
-    Task<Staff?> GetLoginInfo(string login);
-    Task<RepositoryResult<Staff>> Add(Staff newStaff);
+    Task<List<StaffModel>> GetAllAsync();
+    Task<StaffModel?> GetByIdAsync(int idEmployee);
+    Task<Staff?> GetLoginInfoAsync(string login);
+    Task<RepositoryResult<Staff>> AddAsync(Staff newStaff);
 }
 
 // TODO: Переписать все методы с использованием RepositoryResult
 public class StaffRepository(RestaurantContext context, ILogger<StaffRepository> logger) : IStaffRepository
 {
-    public async Task<List<StaffModel>> GetAll()
+    public async Task<List<StaffModel>> GetAllAsync()
     {
         var staffModels =
             from s in context.Staff.AsNoTracking()
@@ -36,7 +36,7 @@ public class StaffRepository(RestaurantContext context, ILogger<StaffRepository>
         return await staffModels.ToListAsync();
     }
 
-    public async Task<StaffModel?> GetById(int idEmployee)
+    public async Task<StaffModel?> GetByIdAsync(int idEmployee)
     {
         var staffModel =
             from s in context.Staff.AsNoTracking()
@@ -56,12 +56,12 @@ public class StaffRepository(RestaurantContext context, ILogger<StaffRepository>
         return await staffModel.FirstOrDefaultAsync();
     }
 
-    public async Task<Staff?> GetLoginInfo(string login)
+    public async Task<Staff?> GetLoginInfoAsync(string login)
     {
         return await context.Staff.AsNoTracking().FirstOrDefaultAsync(s => s.Login == login);
     }
 
-    public async Task<RepositoryResult<Staff>> Add(Staff newStaff)
+    public async Task<RepositoryResult<Staff>> AddAsync(Staff newStaff)
     {
         try
         {

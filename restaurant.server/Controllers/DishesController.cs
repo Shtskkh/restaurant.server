@@ -14,7 +14,7 @@ public class DishesController(IDishesService dishesService) : Controller
     [ProducesResponseType(204)]
     public async Task<IActionResult> GetAll()
     {
-        var dishes = await dishesService.GetAll();
+        var dishes = await dishesService.GetAllAsync();
         if (dishes.Count == 0)
             return NoContent();
 
@@ -34,7 +34,7 @@ public class DishesController(IDishesService dishesService) : Controller
                 Status = 400
             });
 
-        var dish = await dishesService.GetById(id);
+        var dish = await dishesService.GetByIdAsync(id);
         if (dish == null)
             return NotFound(new ProblemDetails
             {

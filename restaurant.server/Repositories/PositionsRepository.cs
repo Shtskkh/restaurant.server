@@ -7,31 +7,31 @@ namespace restaurant.server.Repositories;
 
 public interface IPositionsRepository
 {
-    Task<List<Position>> GetAll();
-    Task<Position?> GetById(int id);
-    Task<Position?> GetByTitle(string title);
-    Task<RepositoryResult<Position>> Add(string positionTitle);
+    Task<List<Position>> GetAllAsync();
+    Task<Position?> GetByIdAsync(int id);
+    Task<Position?> GetByTitleAsync(string title);
+    Task<RepositoryResult<Position>> AddAsync(string positionTitle);
 }
 
 public class PositionsRepository(RestaurantContext context, ILogger<PositionsRepository> logger) : IPositionsRepository
 {
-    public async Task<List<Position>> GetAll()
+    public async Task<List<Position>> GetAllAsync()
     {
         return await context.Positions.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Position?> GetById(int id)
+    public async Task<Position?> GetByIdAsync(int id)
     {
         return await context.Positions.AsNoTracking()
             .FirstOrDefaultAsync(p => p.IdPosition == id);
     }
 
-    public async Task<Position?> GetByTitle(string title)
+    public async Task<Position?> GetByTitleAsync(string title)
     {
         return await context.Positions.AsNoTracking().FirstOrDefaultAsync(p => p.Title == title);
     }
 
-    public async Task<RepositoryResult<Position>> Add(string positionTitle)
+    public async Task<RepositoryResult<Position>> AddAsync(string positionTitle)
     {
         try
         {
