@@ -16,6 +16,7 @@ public class StatusesRepository(RestaurantContext context, ILogger<IStatusesRepo
 {
     public async Task<RepositoryResult<List<Status>>> GetAllAsync()
     {
+        logger.LogInformation("Getting all statuses...");
         try
         {
             var statuses = await context.Statuses.AsNoTracking().ToListAsync();
@@ -30,6 +31,7 @@ public class StatusesRepository(RestaurantContext context, ILogger<IStatusesRepo
 
     public async Task<RepositoryResult<Status>> GetByIdAsync(int id)
     {
+        logger.LogInformation("Getting status with ID: {id}...", id);
         try
         {
             var status = await context.Statuses.AsNoTracking().FirstOrDefaultAsync(s => s.IdStatus == id);
@@ -47,6 +49,7 @@ public class StatusesRepository(RestaurantContext context, ILogger<IStatusesRepo
 
     public async Task<RepositoryResult<Status>> GetByTitleAsync(string title)
     {
+        logger.LogInformation("Getting status with title: {title}...", title);
         try
         {
             var status = await context.Statuses.AsNoTracking().FirstOrDefaultAsync(s => s.Title == title);

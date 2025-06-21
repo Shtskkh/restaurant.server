@@ -36,23 +36,23 @@ public class StaffService(
 
     public async Task<ServiceResult<int>> AddAsync(AddStaffModel dto)
     {
-        logger.LogDebug("Начало создания сотрудника с логином: {Login}", dto.Login);
+        logger.LogDebug("Starting to add employee with login: {login}...", dto.Login);
 
         if (await staffRepository.GetLoginInfoAsync(dto.Login) != null)
         {
-            logger.LogWarning("Попытка создать сотрудника с уже существующим логином: {Login}", dto.Login);
-            return ServiceResult<int>.Fail("Пользователь с таким логином уже существует.");
+            logger.LogWarning("An attempt to create an employee with an existing login: {login}", dto.Login);
+            return ServiceResult<int>.Fail("The user with this username already exists.");
         }
 
         var position = await positionsRepository.GetByTitleAsync(dto.Position);
         if (position == null)
         {
-            logger.LogInformation("Должность {Position} не найдена, создаём новую", dto.Position);
+            logger.LogInformation("Position {position} not found, creating a new one.", dto.Position);
             var positionResult = await positionsRepository.AddAsync(dto.Position);
 
             if (!positionResult.IsSuccess)
             {
-                logger.LogError("Не удалось создать должность {Position}: {Error}", dto.Position,
+                logger.LogError("Couldn't create a position with title {position}: {error}.", dto.Position,
                     positionResult.ErrorMessage);
                 return ServiceResult<int>.Fail(positionResult.ErrorMessage);
             }
@@ -74,11 +74,12 @@ public class StaffService(
         var staffResult = await staffRepository.AddAsync(staff);
         if (!staffResult.IsSuccess)
         {
-            logger.LogError("Не удалось создать сотрудника: {Error}", staffResult.ErrorMessage);
+            logger.LogError("Couldn't create an employee: {error}", staffResult.ErrorMessage);
             return ServiceResult<int>.Fail(staffResult.ErrorMessage);
         }
 
-        logger.LogInformation("Сотрудник успешно создан: {Login}, ID: {IdEmployee}", dto.Login,
+        logger.LogInformation("The employee with the login: {login} has been successfully created, ID: {IdEmployee}",
+            dto.Login,
             staffResult.Data.IdEmployee);
 
         return ServiceResult<int>.Success(staffResult.Data.IdEmployee);

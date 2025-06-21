@@ -42,17 +42,14 @@ public class OrdersService(
     {
         if (order.Dishes.Count == 0) return ServiceResult<int>.Fail("There are no dishes in the order.");
 
-        logger.LogInformation("Starting adding order.");
+        logger.LogInformation("Starting to add order...");
 
-        logger.LogInformation("Getting table.");
         var table = await tablesRepository.GetByNumberAsync(order.Table);
         if (!table.IsSuccess) return ServiceResult<int>.Fail(table.ErrorMessage);
 
-        logger.LogInformation("Getting status.");
         var status = await statusesRepository.GetByTitleAsync("Принят");
         if (!status.IsSuccess) return ServiceResult<int>.Fail(status.ErrorMessage);
 
-        logger.LogInformation("Getting employee.");
         var employee = await staffRepository.GetByLoginAsync(order.EmployeeLogin);
         if (!employee.IsSuccess) return ServiceResult<int>.Fail(employee.ErrorMessage);
 
@@ -64,7 +61,6 @@ public class OrdersService(
             IdEmployee = employee.Data!.IdEmployee
         };
 
-        logger.LogInformation("Adding order.");
         var orderResult = await ordersRepository.AddOrderAsync(newOrder);
 
         if (!orderResult.IsSuccess)
@@ -73,9 +69,8 @@ public class OrdersService(
             return ServiceResult<int>.Fail(orderResult.ErrorMessage);
         }
 
-        foreach (var dish in order.Dishes!)
+        foreach (var dish in order.Dishes)
         {
-            logger.LogInformation("Adding dish.");
             var dishResult = await AddDishesInOrderAsync(orderResult.Data.IdOrder, dish, status.Data);
             if (!dishResult.IsSuccess) return ServiceResult<int>.Fail(dishResult.ErrorMessage);
         }

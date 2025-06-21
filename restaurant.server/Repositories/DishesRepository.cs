@@ -77,6 +77,7 @@ public class DishesRepository(RestaurantContext context, ILogger<DishesRepositor
 
     public async Task<RepositoryResult<Dish>> GetByTitleAsync(string title)
     {
+        logger.LogInformation("Getting dish with title: {title}...", title);
         try
         {
             var dish = await context.Dishes.AsNoTracking().FirstOrDefaultAsync(d => d.Title == title);

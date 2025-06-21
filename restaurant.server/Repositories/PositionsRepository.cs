@@ -10,7 +10,7 @@ public interface IPositionsRepository
     Task<List<Position>> GetAllAsync();
     Task<Position?> GetByIdAsync(int id);
     Task<Position?> GetByTitleAsync(string title);
-    Task<RepositoryResult<Position>> AddAsync(string positionTitle);
+    Task<RepositoryResult<Position>> AddAsync(string title);
 }
 
 public class PositionsRepository(RestaurantContext context, ILogger<PositionsRepository> logger) : IPositionsRepository
@@ -31,13 +31,14 @@ public class PositionsRepository(RestaurantContext context, ILogger<PositionsRep
         return await context.Positions.AsNoTracking().FirstOrDefaultAsync(p => p.Title == title);
     }
 
-    public async Task<RepositoryResult<Position>> AddAsync(string positionTitle)
+    public async Task<RepositoryResult<Position>> AddAsync(string title)
     {
+        logger.LogInformation("Adding position with title: {title}...", title);
         try
         {
             var newPosition = new Position
             {
-                Title = positionTitle
+                Title = title
             };
 
             await context.Positions.AddAsync(newPosition);
@@ -46,12 +47,12 @@ public class PositionsRepository(RestaurantContext context, ILogger<PositionsRep
         }
         catch (DbUpdateException e)
         {
-            logger.LogError(e, "Database error when adding a new position: {Title}.", positionTitle);
+            logger.LogError(e, "Database error when adding a new position: {Title}.", title);
             return RepositoryResult<Position>.Fail("Database error: " + e.InnerException?.Message);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error when adding a new position: {Title}.", positionTitle);
+            logger.LogError(e, "Unexpected error when adding a new position: {Title}.", title);
             return RepositoryResult<Position>.Fail("Error: " + e.Message);
         }
     }

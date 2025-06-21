@@ -86,6 +86,7 @@ public class OrdersRepository(RestaurantContext context, ILogger<OrdersRepositor
 
     public async Task<RepositoryResult<Order>> AddOrderAsync(Order order)
     {
+        logger.LogInformation("Adding a order with ID: {orderId}", order.IdOrder);
         try
         {
             await context.Orders.AddAsync(order);
@@ -106,7 +107,8 @@ public class OrdersRepository(RestaurantContext context, ILogger<OrdersRepositor
 
     public async Task<RepositoryResult<DishesInOrder>> AddDishesInOrderAsync(DishesInOrder dishInOrder)
     {
-        logger.LogInformation("Start adding dishes order");
+        logger.LogInformation("Adding a dish with ID: {dishId} to the order with ID: {dishInOrderId}...",
+            dishInOrder.IdDish, dishInOrder.IdOrder);
         try
         {
             await context.DishesInOrders.AddAsync(dishInOrder);

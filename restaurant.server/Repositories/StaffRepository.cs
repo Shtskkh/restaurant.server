@@ -11,7 +11,7 @@ public interface IStaffRepository
     Task<List<StaffModel>> GetAllAsync();
     Task<StaffModel?> GetByIdAsync(int idEmployee);
     Task<Staff?> GetLoginInfoAsync(string login);
-    Task<RepositoryResult<Staff>> AddAsync(Staff newStaff);
+    Task<RepositoryResult<Staff>> AddAsync(Staff staff);
     Task<RepositoryResult<StaffModel>> GetByLoginAsync(string login);
 }
 
@@ -62,28 +62,30 @@ public class StaffRepository(RestaurantContext context, ILogger<StaffRepository>
         return await context.Staff.AsNoTracking().FirstOrDefaultAsync(s => s.Login == login);
     }
 
-    public async Task<RepositoryResult<Staff>> AddAsync(Staff newStaff)
+    public async Task<RepositoryResult<Staff>> AddAsync(Staff staff)
     {
+        logger.LogInformation("Adding new staff with login: {login}... ", staff.Login);
         try
         {
-            await context.Staff.AddAsync(newStaff);
+            await context.Staff.AddAsync(staff);
             await context.SaveChangesAsync();
-            return RepositoryResult<Staff>.Success(newStaff);
+            return RepositoryResult<Staff>.Success(staff);
         }
         catch (DbUpdateException e)
         {
-            logger.LogError(e, "Database error when adding employee: {Login}", newStaff.Login);
+            logger.LogError(e, "Database error when adding employee: {login}", staff.Login);
             return RepositoryResult<Staff>.Fail("Database error: " + e.InnerException?.Message);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error when adding an employee: {Login}", newStaff.Login);
+            logger.LogError(e, "Unexpected error when adding an employee: {login}", staff.Login);
             return RepositoryResult<Staff>.Fail("Error: " + e.Message);
         }
     }
 
     public async Task<RepositoryResult<StaffModel>> GetByLoginAsync(string login)
     {
+        logger.LogInformation("Getting employee with login: {login}...", login);
         try
         {
             var staffModel = await (

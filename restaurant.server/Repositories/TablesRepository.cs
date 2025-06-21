@@ -16,6 +16,7 @@ public class TablesRepository(RestaurantContext context, ILogger<TablesRepositor
 {
     public async Task<RepositoryResult<List<Table>>> GetAllAsync()
     {
+        logger.LogInformation("Getting all tables...");
         try
         {
             var tables = await context.Tables.AsNoTracking().ToListAsync();
@@ -30,6 +31,7 @@ public class TablesRepository(RestaurantContext context, ILogger<TablesRepositor
 
     public async Task<RepositoryResult<Table>> GetByIdAsync(int id)
     {
+        logger.LogInformation("Getting table with ID: {id}...", id);
         try
         {
             var table = await context.Tables.AsNoTracking().FirstOrDefaultAsync(t => t.IdTable == id);
@@ -47,6 +49,7 @@ public class TablesRepository(RestaurantContext context, ILogger<TablesRepositor
 
     public async Task<RepositoryResult<Table>> GetByNumberAsync(int number)
     {
+        logger.LogInformation("Getting table with number: {number}...", number);
         try
         {
             var table = await context.Tables.AsNoTracking().FirstOrDefaultAsync(t => t.Number == number);
