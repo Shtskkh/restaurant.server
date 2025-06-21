@@ -68,18 +68,17 @@ public class StaffRepository(RestaurantContext context, ILogger<StaffRepository>
         {
             await context.Staff.AddAsync(newStaff);
             await context.SaveChangesAsync();
-            logger.LogInformation("Сотрудник успешно добавлен.");
             return RepositoryResult<Staff>.Success(newStaff);
         }
         catch (DbUpdateException e)
         {
-            logger.LogError(e, "Ошибка базы данных при добавлении сотрудника: {Login}", newStaff.Login);
-            return RepositoryResult<Staff>.Fail("Ошибка базы данных: " + e.InnerException?.Message);
+            logger.LogError(e, "Database error when adding employee: {Login}", newStaff.Login);
+            return RepositoryResult<Staff>.Fail("Database error: " + e.InnerException?.Message);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Непредвиденная ошибка при добавлении сотрудника: {Login}", newStaff.Login);
-            return RepositoryResult<Staff>.Fail("Произошла ошибка: " + e.Message);
+            logger.LogError(e, "Unexpected error when adding an employee: {Login}", newStaff.Login);
+            return RepositoryResult<Staff>.Fail("Error: " + e.Message);
         }
     }
 
@@ -109,7 +108,7 @@ public class StaffRepository(RestaurantContext context, ILogger<StaffRepository>
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error getting employee with login: {Login}.", login);
+            logger.LogError(e, "Unexpected error when getting employee with login: {Login}.", login);
             return RepositoryResult<StaffModel>.Fail("Error: " + e.Message);
         }
     }

@@ -84,7 +84,7 @@ public class OrdersService(
         return ServiceResult<int>.Success(orderResult.Data.IdOrder);
     }
 
-    public async Task<ServiceResult<bool>> AddDishesInOrderAsync(int orderId, AddDishInOrderModel dish, Status status)
+    private async Task<ServiceResult<bool>> AddDishesInOrderAsync(int orderId, AddDishInOrderModel dish, Status status)
     {
         var dishResult = await dishesRepository.GetByTitleAsync(dish.Title);
         if (!dishResult.IsSuccess) return ServiceResult<bool>.Fail(dishResult.ErrorMessage);

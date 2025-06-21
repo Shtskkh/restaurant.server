@@ -21,10 +21,10 @@ public class StatusesRepository(RestaurantContext context, ILogger<IStatusesRepo
             var statuses = await context.Statuses.AsNoTracking().ToListAsync();
             return RepositoryResult<List<Status>>.Success(statuses);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            logger.LogError(ex, "Error getting statuses.");
-            return RepositoryResult<List<Status>>.Fail("Error: " + ex.Message);
+            logger.LogError(e, "Unexpected error when getting all statuses.");
+            return RepositoryResult<List<Status>>.Fail("Error: " + e.Message);
         }
     }
 
@@ -38,10 +38,10 @@ public class StatusesRepository(RestaurantContext context, ILogger<IStatusesRepo
             logger.LogError("Status with ID: {Id} not found.", id);
             return RepositoryResult<Status>.Fail($"Status with ID: {id} not found.");
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            logger.LogError(ex, "Error getting status.");
-            return RepositoryResult<Status>.Fail("Error: " + ex.Message);
+            logger.LogError(e, "Unexpected error when getting status with ID: {id}.", id);
+            return RepositoryResult<Status>.Fail("Error: " + e.Message);
         }
     }
 
@@ -55,10 +55,10 @@ public class StatusesRepository(RestaurantContext context, ILogger<IStatusesRepo
             logger.LogError("Status with title: {title} not found.", title);
             return RepositoryResult<Status>.Fail($"Status with title: {title} not found.");
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            logger.LogError(ex, "Error getting status.");
-            return RepositoryResult<Status>.Fail("Error: " + ex.Message);
+            logger.LogError(e, "Unexpected error when getting status with title: {title}.", title);
+            return RepositoryResult<Status>.Fail("Error: " + e.Message);
         }
     }
 }

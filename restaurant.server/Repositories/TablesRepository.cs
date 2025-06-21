@@ -23,8 +23,8 @@ public class TablesRepository(RestaurantContext context, ILogger<TablesRepositor
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error getting tables.");
-            return RepositoryResult<List<Table>>.Fail("Error getting tables: " + e.Message);
+            logger.LogError(e, "Unexpected error when getting all tables.");
+            return RepositoryResult<List<Table>>.Fail("Error: " + e.Message);
         }
     }
 
@@ -40,7 +40,7 @@ public class TablesRepository(RestaurantContext context, ILogger<TablesRepositor
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error getting table.");
+            logger.LogError(e, "Unexpected error when getting table with ID: {id}.", id);
             return RepositoryResult<Table>.Fail("Error: " + e.Message);
         }
     }
@@ -57,7 +57,7 @@ public class TablesRepository(RestaurantContext context, ILogger<TablesRepositor
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error getting table with number: {number}.", number);
+            logger.LogError(e, "Unexpected error when getting table with number: {number}.", number);
             return RepositoryResult<Table>.Fail("Error: " + e.Message);
         }
     }

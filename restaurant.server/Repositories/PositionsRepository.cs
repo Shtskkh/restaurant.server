@@ -44,15 +44,15 @@ public class PositionsRepository(RestaurantContext context, ILogger<PositionsRep
             await context.SaveChangesAsync();
             return RepositoryResult<Position>.Success(newPosition);
         }
-        catch (DbUpdateException ex)
+        catch (DbUpdateException e)
         {
-            logger.LogError(ex, "Ошибка базы данных при добавлении новой должности: {Title}.", positionTitle);
-            return RepositoryResult<Position>.Fail("Ошибка базы данных: " + ex.InnerException?.Message);
+            logger.LogError(e, "Database error when adding a new position: {Title}.", positionTitle);
+            return RepositoryResult<Position>.Fail("Database error: " + e.InnerException?.Message);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            logger.LogError(ex, "Непредвиденная ошибка при добавлении новой должности: {Title}.", positionTitle);
-            return RepositoryResult<Position>.Fail("Произошла ошибка: " + ex.Message);
+            logger.LogError(e, "Unexpected error when adding a new position: {Title}.", positionTitle);
+            return RepositoryResult<Position>.Fail("Error: " + e.Message);
         }
     }
 }
