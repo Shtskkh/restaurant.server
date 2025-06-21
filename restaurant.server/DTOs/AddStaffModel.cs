@@ -1,6 +1,6 @@
 ﻿namespace restaurant.server.DTOs;
 
-public class CreateStaffModel
+public class AddStaffModel
 {
     public required string LastName { get; set; }
     public required string FirstName { get; set; }

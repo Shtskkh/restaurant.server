@@ -10,7 +10,7 @@ public interface IStaffService
     Task<List<StaffModel>> GetAllAsync();
     Task<StaffModel?> GetByIdAsync(int id);
     Task<List<Position>> GetAllPositionsAsync();
-    Task<ServiceResult<int>> AddAsync(CreateStaffModel dto);
+    Task<ServiceResult<int>> AddAsync(AddStaffModel dto);
 }
 
 public class StaffService(
@@ -34,7 +34,7 @@ public class StaffService(
         return await positionsRepository.GetAllAsync();
     }
 
-    public async Task<ServiceResult<int>> AddAsync(CreateStaffModel dto)
+    public async Task<ServiceResult<int>> AddAsync(AddStaffModel dto)
     {
         logger.LogDebug("Начало создания сотрудника с логином: {Login}", dto.Login);
 
@@ -80,6 +80,7 @@ public class StaffService(
 
         logger.LogInformation("Сотрудник успешно создан: {Login}, ID: {IdEmployee}", dto.Login,
             staffResult.Data.IdEmployee);
+
         return ServiceResult<int>.Success(staffResult.Data.IdEmployee);
     }
 }

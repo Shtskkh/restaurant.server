@@ -110,7 +110,7 @@ public class StaffServiceTests
     public async Task Add_ValidDtoWithNewPosition_ReturnsSuccess()
     {
         // Arrange
-        var dto = new CreateStaffModel
+        var dto = new AddStaffModel
         {
             LastName = "Smith",
             FirstName = "John",
@@ -165,7 +165,7 @@ public class StaffServiceTests
     public async Task Add_ExistingLogin_ReturnsFailure()
     {
         // Arrange
-        var dto = new CreateStaffModel
+        var dto = new AddStaffModel
         {
             LastName = "Smith",
             FirstName = "John",
@@ -196,7 +196,7 @@ public class StaffServiceTests
     public async Task Add_PositionCreationFails_ReturnsFailure()
     {
         // Arrange
-        var dto = new CreateStaffModel
+        var dto = new AddStaffModel
         {
             LastName = "Smith",
             FirstName = "John",
@@ -229,7 +229,7 @@ public class StaffServiceTests
     public async Task Add_StaffCreationFails_ReturnsFailure()
     {
         // Arrange
-        var dto = new CreateStaffModel
+        var dto = new AddStaffModel
         {
             LastName = "Smith",
             FirstName = "John",

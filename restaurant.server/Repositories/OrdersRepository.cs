@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using restaurant.server.Context;
 using restaurant.server.DTOs;
+using restaurant.server.Models;
+using restaurant.server.Utils;
 
 namespace restaurant.server.Repositories;
 
@@ -9,9 +11,11 @@ public interface IOrdersRepository
     Task<List<OrderModel>> GetAllAsync();
     Task<OrderModel?> GetByIdAsync(int idOrder);
     Task<List<DishInOrderModel>> GetDishesInOrderAsync(int idOrder);
+    Task<RepositoryResult<Order>> AddOrderAsync(Order order);
+    Task<RepositoryResult<DishesInOrder>> AddDishesInOrderAsync(DishesInOrder dishes);
 }
 
-public class OrdersRepository(RestaurantContext context) : IOrdersRepository
+public class OrdersRepository(RestaurantContext context, ILogger<OrdersRepository> logger) : IOrdersRepository
 {
     public async Task<List<OrderModel>> GetAllAsync()
     {
@@ -78,5 +82,48 @@ public class OrdersRepository(RestaurantContext context) : IOrdersRepository
             };
 
         return await dishesInOrderModels.ToListAsync();
+    }
+
+    public async Task<RepositoryResult<Order>> AddOrderAsync(Order order)
+    {
+        try
+        {
+            await context.Orders.AddAsync(order);
+            await context.SaveChangesAsync();
+            return RepositoryResult<Order>.Success(order);
+        }
+        catch (DbUpdateException ex)
+        {
+            logger.LogError(ex, "Database error when adding order: {OrderId}", order.IdOrder);
+            return RepositoryResult<Order>.Fail("Database error: " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Unexpected error while adding order: {OrderId}", order.IdOrder);
+            return RepositoryResult<Order>.Fail("Unexpected error: " + ex.Message);
+        }
+    }
+
+    public async Task<RepositoryResult<DishesInOrder>> AddDishesInOrderAsync(DishesInOrder dishInOrder)
+    {
+        logger.LogInformation("Start adding dishes order");
+        try
+        {
+            await context.DishesInOrders.AddAsync(dishInOrder);
+            await context.SaveChangesAsync();
+            return RepositoryResult<DishesInOrder>.Success(dishInOrder);
+        }
+        catch (DbUpdateException ex)
+        {
+            logger.LogError(ex, "Database error when adding dish: {DishId} in order: {OrderID}", dishInOrder.IdDish,
+                dishInOrder.IdOrder);
+            return RepositoryResult<DishesInOrder>.Fail("Database error: " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Unexpected error while adding dish: {DishId} in order: {OrderID}", dishInOrder.IdDish,
+                dishInOrder.IdOrder);
+            return RepositoryResult<DishesInOrder>.Fail("Unexpected error: " + ex.Message);
+        }
     }
 }

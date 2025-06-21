@@ -12,6 +12,7 @@ public interface IStaffRepository
     Task<StaffModel?> GetByIdAsync(int idEmployee);
     Task<Staff?> GetLoginInfoAsync(string login);
     Task<RepositoryResult<Staff>> AddAsync(Staff newStaff);
+    Task<RepositoryResult<StaffModel>> GetByLoginAsync(string login);
 }
 
 // TODO: Переписать все методы с использованием RepositoryResult
@@ -70,15 +71,46 @@ public class StaffRepository(RestaurantContext context, ILogger<StaffRepository>
             logger.LogInformation("Сотрудник успешно добавлен.");
             return RepositoryResult<Staff>.Success(newStaff);
         }
-        catch (DbUpdateException ex)
+        catch (DbUpdateException e)
         {
-            logger.LogError(ex, "Ошибка базы данных при добавлении сотрудника: {Login}", newStaff.Login);
-            return RepositoryResult<Staff>.Fail("Ошибка базы данных: " + ex.InnerException?.Message);
+            logger.LogError(e, "Ошибка базы данных при добавлении сотрудника: {Login}", newStaff.Login);
+            return RepositoryResult<Staff>.Fail("Ошибка базы данных: " + e.InnerException?.Message);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            logger.LogError(ex, "Непредвиденная ошибка при добавлении сотрудника: {Login}", newStaff.Login);
-            return RepositoryResult<Staff>.Fail("Произошла ошибка: " + ex.Message);
+            logger.LogError(e, "Непредвиденная ошибка при добавлении сотрудника: {Login}", newStaff.Login);
+            return RepositoryResult<Staff>.Fail("Произошла ошибка: " + e.Message);
+        }
+    }
+
+    public async Task<RepositoryResult<StaffModel>> GetByLoginAsync(string login)
+    {
+        try
+        {
+            var staffModel = await (
+                from s in context.Staff.AsNoTracking()
+                where s.Login == login
+                join p in context.Positions.AsNoTracking()
+                    on s.IdPosition equals p.IdPosition
+                select new StaffModel
+                {
+                    IdEmployee = s.IdEmployee,
+                    Position = p.Title,
+                    FirstName = s.FirstName,
+                    LastName = s.LastName,
+                    MiddleName = s.MiddleName,
+                    PhoneNumber = s.PhoneNumber
+                }).FirstOrDefaultAsync();
+
+            if (staffModel != null) return RepositoryResult<StaffModel>.Success(staffModel);
+
+            logger.LogError("Employee with login: {Login} not found.", login);
+            return RepositoryResult<StaffModel>.Fail($"Employee with login: {login} not found.");
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error getting employee with login: {Login}.", login);
+            return RepositoryResult<StaffModel>.Fail("Error: " + e.Message);
         }
     }
 }

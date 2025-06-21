@@ -44,4 +44,16 @@ public class OrdersController(IOrdersService ordersService) : Controller
 
         return Ok(order);
     }
+
+    [HttpPost("Add")]
+    public async Task<IActionResult> Add([FromForm] AddOrderModel order)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var result = await ordersService.AddAsync(order);
+
+        if (!result.IsSuccess) return BadRequest(result.ErrorMessage);
+
+        return Ok(result.Data);
+    }
 }

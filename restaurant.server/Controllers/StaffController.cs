@@ -54,7 +54,7 @@ public class StaffController(IStaffService staffService) : Controller
     [HttpPost("Add")]
     [ProducesResponseType(typeof(int), 201)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> Add([FromForm] CreateStaffModel newEmployee)
+    public async Task<IActionResult> Add([FromForm] AddStaffModel newEmployee)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

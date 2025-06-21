@@ -41,6 +41,8 @@ builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<IDishesRepository, DishesRepository>();
 builder.Services.AddScoped<ISuppliesRepository, SuppliesRepository>();
 builder.Services.AddScoped<IPositionsRepository, PositionsRepository>();
+builder.Services.AddScoped<ITablesRepository, TablesRepository>();
+builder.Services.AddScoped<IStatusesRepository, StatusesRepository>();
 
 builder.Services.AddSingleton<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
