@@ -128,4 +128,69 @@ public class OrdersRepository(RestaurantContext context, ILogger<OrdersRepositor
             return RepositoryResult<DishesInOrder>.Fail("Error: " + e.Message);
         }
     }
+
+    public async Task<RepositoryResult<List<OrderModel>>> GetCurrentOrdersAsync()
+    {
+        logger.LogInformation("Getting all current orders...");
+        try
+        {
+            var ordersModels = await (
+                from order in context.Orders.AsNoTracking()
+                join table in context.Tables.AsNoTracking()
+                    on order.IdTable equals table.IdTable
+                join status in context.Statuses.AsNoTracking()
+                    on order.IdStatus equals status.IdStatus
+                join employee in context.Staff.AsNoTracking()
+                    on order.IdEmployee equals employee.IdEmployee
+                where status.Title == "Принят" || status.Title == "Готовится"
+                select new OrderModel
+                {
+                    IdOrder = order.IdOrder,
+                    Date = order.Date,
+                    TableNumber = table.Number,
+                    Status = status.Title,
+                    Employee = $"{employee.LastName} {employee.FirstName} {employee.MiddleName}"
+                }).ToListAsync();
+
+            return RepositoryResult<List<OrderModel>>.Success(ordersModels);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Unexpected error while getting an current orders.");
+            return RepositoryResult<List<OrderModel>>.Fail("Error: " + e.Message);
+        }
+    }
+
+    public async Task<RepositoryResult<List<OrderModel>>> GetCurrentOrdersAsync(int employeeId)
+    {
+        logger.LogInformation("Getting all current orders for employee with ID: {employeeId}...", employeeId);
+        try
+        {
+            var ordersModels = await (
+                from order in context.Orders.AsNoTracking()
+                join table in context.Tables.AsNoTracking()
+                    on order.IdTable equals table.IdTable
+                join status in context.Statuses.AsNoTracking()
+                    on order.IdStatus equals status.IdStatus
+                join employee in context.Staff.AsNoTracking()
+                    on order.IdEmployee equals employee.IdEmployee
+                where (status.Title == "Принят" || status.Title == "Готовится") && order.IdEmployee == employeeId
+                select new OrderModel
+                {
+                    IdOrder = order.IdOrder,
+                    Date = order.Date,
+                    TableNumber = table.Number,
+                    Status = status.Title,
+                    Employee = $"{employee.LastName} {employee.FirstName} {employee.MiddleName}"
+                }).ToListAsync();
+
+            return RepositoryResult<List<OrderModel>>.Success(ordersModels);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Unexpected error while getting an current orders for employee with  ID: {employeeId}.",
+                employeeId);
+            return RepositoryResult<List<OrderModel>>.Fail("Error: " + e.Message);
+        }
+    }
 }
