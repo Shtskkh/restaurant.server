@@ -45,6 +45,18 @@ public class OrdersController(IOrdersService ordersService) : Controller
         return Ok(order);
     }
 
+    [HttpGet("GetCurrent/{employeeLogin}")]
+    [ProducesResponseType(typeof(List<OrderModel>), 200)]
+    public async Task<IActionResult> GetCurrent(string employeeLogin)
+    {
+        if (string.IsNullOrWhiteSpace(employeeLogin)) return BadRequest();
+
+        var result = await ordersService.GetCurrentOrdersAsync(employeeLogin);
+        if (!result.IsSuccess) return BadRequest(result.ErrorMessage);
+
+        return Ok(result.Data);
+    }
+
     [HttpPost("Add")]
     public async Task<IActionResult> Add([FromForm] AddOrderModel order)
     {

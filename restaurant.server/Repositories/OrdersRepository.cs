@@ -13,6 +13,8 @@ public interface IOrdersRepository
     Task<List<DishInOrderModel>> GetDishesInOrderAsync(int idOrder);
     Task<RepositoryResult<Order>> AddOrderAsync(Order order);
     Task<RepositoryResult<DishesInOrder>> AddDishesInOrderAsync(DishesInOrder dishes);
+    Task<RepositoryResult<List<OrderModel>>> GetCurrentOrdersAsync();
+    Task<RepositoryResult<List<OrderModel>>> GetCurrentOrdersAsync(string employeeLogin);
 }
 
 public class OrdersRepository(RestaurantContext context, ILogger<OrdersRepository> logger) : IOrdersRepository
@@ -161,9 +163,9 @@ public class OrdersRepository(RestaurantContext context, ILogger<OrdersRepositor
         }
     }
 
-    public async Task<RepositoryResult<List<OrderModel>>> GetCurrentOrdersAsync(int employeeId)
+    public async Task<RepositoryResult<List<OrderModel>>> GetCurrentOrdersAsync(string employeeLogin)
     {
-        logger.LogInformation("Getting all current orders for employee with ID: {employeeId}...", employeeId);
+        logger.LogInformation("Getting all current orders for employee with login: {employeeLogin}...", employeeLogin);
         try
         {
             var ordersModels = await (
@@ -174,7 +176,7 @@ public class OrdersRepository(RestaurantContext context, ILogger<OrdersRepositor
                     on order.IdStatus equals status.IdStatus
                 join employee in context.Staff.AsNoTracking()
                     on order.IdEmployee equals employee.IdEmployee
-                where (status.Title == "Принят" || status.Title == "Готовится") && order.IdEmployee == employeeId
+                where (status.Title == "Принят" || status.Title == "Готовится") && employee.Login == employeeLogin
                 select new OrderModel
                 {
                     IdOrder = order.IdOrder,
@@ -188,8 +190,9 @@ public class OrdersRepository(RestaurantContext context, ILogger<OrdersRepositor
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while getting an current orders for employee with  ID: {employeeId}.",
-                employeeId);
+            logger.LogError(e,
+                "Unexpected error while getting an current orders for employee with login: {employeeLogin}.",
+                employeeLogin);
             return RepositoryResult<List<OrderModel>>.Fail("Error: " + e.Message);
         }
     }

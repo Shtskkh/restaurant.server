@@ -9,6 +9,7 @@ public interface IOrdersService
 {
     Task<List<OrderModel>> GetAllAsync();
     Task<OrderModel?> GetByIdAsync(int id);
+    Task<ServiceResult<List<OrderModel>>> GetCurrentOrdersAsync(string employeeLogin);
     Task<ServiceResult<int>> AddAsync(AddOrderModel order);
 }
 
@@ -38,6 +39,31 @@ public class OrdersService(
         return order;
     }
 
+    // TODO: добавить логирование
+    public async Task<ServiceResult<List<OrderModel>>> GetCurrentOrdersAsync(string employeeLogin)
+    {
+        try
+        {
+            var ordersResult = await ordersRepository.GetCurrentOrdersAsync(employeeLogin);
+            if (!ordersResult.IsSuccess) return ServiceResult<List<OrderModel>>.Fail(ordersResult.ErrorMessage);
+
+            foreach (var order in ordersResult.Data)
+            {
+                var dishesResult = await ordersRepository.GetDishesInOrderAsync(order.IdOrder);
+                order.DishesInOrder = dishesResult;
+            }
+
+            return ServiceResult<List<OrderModel>>.Success(ordersResult.Data);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Unexpected service error when getting current orders for employee with login: {login}",
+                employeeLogin);
+            return ServiceResult<List<OrderModel>>.Fail("Error: " + e.Message);
+        }
+    }
+
+    // TODO: добавить блок try catch
     public async Task<ServiceResult<int>> AddAsync(AddOrderModel order)
     {
         if (order.Dishes.Count == 0) return ServiceResult<int>.Fail("There are no dishes in the order.");
@@ -79,6 +105,7 @@ public class OrdersService(
         return ServiceResult<int>.Success(orderResult.Data.IdOrder);
     }
 
+    // TODO: добавить логирование
     private async Task<ServiceResult<bool>> AddDishesInOrderAsync(int orderId, AddDishInOrderModel dish, Status status)
     {
         var dishResult = await dishesRepository.GetByTitleAsync(dish.Title);
